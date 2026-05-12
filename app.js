@@ -441,7 +441,149 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// FORM VALIDATION
+// ============== ENHANCED HEADING ANIMATIONS ==============
+function animateHeadings() {
+  const headings = document.querySelectorAll('h1, h2, h3, h4');
+  headings.forEach((heading, index) => {
+    // Skip already animated hero titles
+    if (heading.classList.contains('hero-title')) return;
+    
+    // Apply staggered animation
+    const delay = 0.1 + (index % 8) * 0.08;
+    heading.style.animation = `slideUp 0.7s ease-out ${delay}s both`;
+    heading.style.transformOrigin = 'left';
+  });
+}
+
+// ============== LETTER-BY-LETTER HEADING ANIMATION ==============
+function animateHeadingLetters() {
+  const headings = document.querySelectorAll('h2');
+  headings.forEach(heading => {
+    // Skip if already has special classes
+    if (heading.classList.contains('hero-title')) return;
+    
+    const text = heading.textContent;
+    heading.textContent = '';
+    heading.style.display = 'inline-block';
+    
+    [...text].forEach((char, i) => {
+      const span = document.createElement('span');
+      span.textContent = char;
+      span.className = 'char-animate';
+      span.style.animationDelay = `${i * 0.03}s`;
+      heading.appendChild(span);
+    });
+  });
+}
+
+// ============== ANIMATED DASHBOARD CARDS ==============
+function animateDashboardCards() {
+  const dashboardCards = document.querySelectorAll('.dashboard-card');
+  dashboardCards.forEach((card, index) => {
+    card.classList.add('dashboard-card-enhanced');
+    
+    // Animate chart bars
+    const bars = card.querySelectorAll('.chart-bar');
+    bars.forEach((bar, barIndex) => {
+      bar.style.animation = `slideUp 0.6s ease-out ${0.3 + barIndex * 0.08}s both`;
+      bar.style.opacity = '0';
+    });
+    
+    // Animate metric chips
+    const chips = card.querySelectorAll('.metric-chip');
+    chips.forEach((chip, chipIndex) => {
+      chip.style.animation = `fadeInScale 0.6s ease-out ${0.6 + chipIndex * 0.1}s both`;
+      chip.style.opacity = '0';
+    });
+  });
+}
+
+// ============== STAGGERED SERVICE CARDS ==============
+function animateServiceCards() {
+  const serviceCards = document.querySelectorAll('.glass-card, .service-card, .service-detail-card');
+  serviceCards.forEach((card, index) => {
+    const delay = (index % 4) * 0.12;
+    card.style.animation = `slideUp 0.7s ease-out ${delay}s both`;
+    card.style.opacity = '0';
+  });
+}
+
+// ============== STAT CARDS ANIMATION WITH STAGGER ==============
+function animateStatCards() {
+  const statCards = document.querySelectorAll('.stat-card');
+  statCards.forEach((card, index) => {
+    const delay = 0.3 + (index * 0.1);
+    card.style.animation = `elasticBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s both`;
+    card.style.opacity = '0';
+  });
+}
+
+// ============== SCROLL-TRIGGERED ANIMATIONS ==============
+function initScrollAnimations() {
+  const observerOptions = {
+    threshold: 0.15,
+    rootMargin: '0px 0px -100px 0px'
+  };
+  
+  const scrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Animate headings on scroll
+        if (entry.target.tagName.match(/h[1-4]/i)) {
+          entry.target.style.animation = `slideUp 0.7s ease-out both`;
+        }
+        
+        // Animate cards on scroll
+        if (entry.target.classList.contains('glass-card') || 
+            entry.target.classList.contains('service-detail-card') ||
+            entry.target.classList.contains('testimonial-card')) {
+          entry.target.style.animation = `slideUp 0.7s ease-out both`;
+          entry.target.style.opacity = '1';
+        }
+        
+        // Animate pricing cards with glow
+        if (entry.target.classList.contains('pricing-card')) {
+          entry.target.style.animation = `glowPulse 2s ease-in-out infinite`;
+        }
+        
+        scrollObserver.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+  
+  // Observe all elements that should animate on scroll
+  document.querySelectorAll(
+    'h2, h3, .glass-card, .service-detail-card, .testimonial-card, .pricing-card, .faq-item'
+  ).forEach(el => {
+    el.style.transition = 'all 0.6s ease';
+    scrollObserver.observe(el);
+  });
+}
+
+// ============== BUTTON HOVER ANIMATIONS ==============
+function enhanceButtonAnimations() {
+  const buttons = document.querySelectorAll('.btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('mouseenter', function() {
+      this.style.animation = 'pulse 0.6s ease-in-out';
+    });
+    
+    btn.addEventListener('mouseleave', function() {
+      this.style.animation = 'none';
+    });
+  });
+}
+
+// ============== ACCORDION ANIMATIONS ==============
+function animateAccordionItems() {
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach((item, index) => {
+    item.style.animation = `slideUp 0.6s ease-out ${0.2 + index * 0.06}s both`;
+    item.style.opacity = '0';
+  });
+}
+
+// ============== FORM VALIDATION
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
@@ -482,3 +624,18 @@ function hideAllFaqItems() {
 }
 
 window.addEventListener('load', hideAllFaqItems);
+
+// ============== INITIALIZE ALL ENHANCED ANIMATIONS ==============
+window.addEventListener('load', () => {
+  // Delay animations slightly for better visual impact
+  setTimeout(() => {
+    animateHeadings();
+    animateHeadingLetters();
+    animateDashboardCards();
+    animateServiceCards();
+    animateStatCards();
+    animateAccordionItems();
+    initScrollAnimations();
+    enhanceButtonAnimations();
+  }, 100);
+});
