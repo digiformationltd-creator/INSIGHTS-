@@ -338,20 +338,8 @@ if (announcementMessage) {
   }, 4000);
 }
 
-// ===== MARQUEE DUPLICATION FOR SMOOTH LOOP =====
-
-const marqueeTrack = document.querySelector('.marquee-track');
-if (marqueeTrack) {
-  const items = marqueeTrack.querySelectorAll('.marquee-item');
-  const clone = marqueeTrack.cloneNode(true);
-  marqueeTrack.parentNode.appendChild(clone.querySelector('.marquee-track') || clone);
-
-  // Duplicate items for seamless loop
-  items.forEach(item => {
-    const duplicate = item.cloneNode(true);
-    marqueeTrack.appendChild(duplicate);
-  });
-}
+// ===== MARQUEE ANIMATION (CSS-only, no doubling) =====
+// Marquee animation handled entirely by CSS with seamless loop
 
 // ===== SMOOTH FADE IN ON PAGE LOAD =====
 
